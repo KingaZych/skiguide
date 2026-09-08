@@ -157,3 +157,59 @@ document.addEventListener('click', () => {
         if (trigger) trigger.setAttribute('aria-expanded', 'false');
     });
 });
+
+
+// About page: replace the old statistics strip with a visual ski-route panorama.
+const aboutNumbersSection = document.querySelector('.about-numbers-section');
+
+if (aboutNumbersSection) {
+    const terrainStyles = document.createElement('link');
+    terrainStyles.rel = 'stylesheet';
+    terrainStyles.href = new URL('../css/terrain.css', document.currentScript.src).href;
+    document.head.appendChild(terrainStyles);
+
+    const routeSection = document.createElement('section');
+    routeSection.className = 'about-route-section reveal';
+    routeSection.setAttribute('aria-label', 'Panoramic mountain route');
+    routeSection.innerHTML = `
+        <div class="about-route-inner">
+            <span class="about-route-brand">SKIGUIDE.INFO</span>
+            <svg class="about-route-map" viewBox="0 0 1200 260" role="img" aria-label="Stylised ski route across mountain terrain">
+                <path class="about-route-line-glow" d="M55 172 C150 142 225 190 315 158 S445 102 550 136 S690 176 790 118 S955 82 1140 150" />
+                <path class="about-route-line" d="M55 172 C150 142 225 190 315 158 S445 102 550 136 S690 176 790 118 S955 82 1140 150" />
+
+                <circle class="about-route-point" cx="55" cy="172" r="8" />
+                <circle class="about-route-point" cx="315" cy="158" r="8" />
+                <circle class="about-route-point" cx="790" cy="118" r="8" />
+                <circle class="about-route-point" cx="1140" cy="150" r="8" />
+
+                <text class="about-route-label" x="55" y="142">START</text>
+                <text class="about-route-altitude" x="55" y="160">2 280 m</text>
+
+                <text class="about-route-label" x="315" y="126">PASS</text>
+                <text class="about-route-altitude" x="315" y="144">2 640 m</text>
+
+                <text class="about-route-label" x="790" y="84">SUMMIT</text>
+                <text class="about-route-altitude" x="790" y="102">3 126 m</text>
+
+                <text class="about-route-label" x="1060" y="184">FINISH</text>
+                <text class="about-route-altitude" x="1060" y="202">1 460 m</text>
+            </svg>
+        </div>`;
+
+    aboutNumbersSection.replaceWith(routeSection);
+
+    if ('IntersectionObserver' in window) {
+        const routeObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    routeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        routeObserver.observe(routeSection);
+    } else {
+        routeSection.classList.add('visible');
+    }
+}
