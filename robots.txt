@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kingazych.github.io/skiguide/sitemap.xml
